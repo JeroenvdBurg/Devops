@@ -4,16 +4,40 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+  - main
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  isDevBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+  isReleaseBranch: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/release')]
+  isMainBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+parameters:
+  - name: deployTest
+    displayName: Force Test Deployment
+    type: boolean
+    default: false
+
+  - name: webApps
+    type: object
+    default:
+      - appName: "Web"
+        dependsOn: []
+      - appName: "Cms"
+        dependsOn: ["Web"]
+      - appName: "Admin"
+        dependsOn: ["Cms"]
+
+stages:
+  - stage: DeployTest
+    displayName: Deploy env:Test
+    condition: and( succeeded() , or( eq( ${{ parameters.deployTest }}, true), eq(variables.isMainBranch, true) ) )
+    jobs:
+      - ${{ each app in parameters.webApps }}:
+          - template: "sub-template.yml"
+            parameters:
+              environment: "test"
+              appName: ${{ app.appName}}
+              dependsOn: ${{ app.dependsOn}}
