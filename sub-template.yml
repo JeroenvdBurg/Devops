@@ -1,0 +1,18 @@
+parameters:
+- name: appName
+  type: string
+
+- name: projectName
+  type: string
+
+- name: dependsOn
+  type: array
+   
+jobs:
+  - job: ${{ parameters.appName}}
+    displayName: Build ${{ parameters.appName }}
+    dependsOn: ${{ parameters.dependsOn }}
+    steps:
+    - script: echo Hello, world!
+      displayName: 'Run a one-line script'
+   
