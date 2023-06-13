@@ -24,11 +24,10 @@ parameters:
     type: object
     default:
       - appName: "Web"
-        dependsOn: []
       - appName: "Cms"
-        dependsOn: ["Web"]
+        dependsOn: "Web"
       - appName: "Admin"
-        dependsOn: ["Cms"]
+        dependsOn: "Cms"
 
 stages:
   - stage: DeployTest
@@ -38,6 +37,5 @@ stages:
       - ${{ each app in parameters.webApps }}:
           - template: "sub-template.yml"
             parameters:
-              environment: "test"
               appName: ${{ app.appName}}
               dependsOn: ${{ app.dependsOn}}
