@@ -2,11 +2,9 @@ parameters:
 - name: appName
   type: string
 
-- name: projectName
-  type: string
-
 - name: dependsOn
   type: string
+  default: ''
    
 jobs:
   - job: ${{ parameters.appName}}
