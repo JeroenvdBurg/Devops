@@ -6,7 +6,7 @@ parameters:
   type: string
 
 - name: dependsOn
-  type: array
+  type: string
    
 jobs:
   - job: ${{ parameters.appName}}
