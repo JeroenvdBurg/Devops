@@ -6,13 +6,29 @@
 pr:
   branches:
     include:
-      - master
-      - feature/*
-      - develop
+      - "*"
+  paths:
+    include:
+      - "*"
+    exclude:
+      - IaC-Bicep/*
+      - azure-pipelines/infra*
   drafts: false
 
+# Run on changes to main or dev or release branches
 trigger:
-  - main
+  batch: true
+  branches:
+    include:
+      - main
+      - develop
+      - release/*
+  paths:
+    include:
+      - "*"
+    exclude:
+      - IaC-Bicep/*
+      - azure-pipelines/infra*
 
 pool:
   vmImage: ubuntu-latest
