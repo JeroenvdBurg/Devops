@@ -17,6 +17,6 @@ jobs:
       uses: github-actions-up-and-running/pr-comment@v1.0.1
       with:
         # GITHUB_TOKEN secret
-        repo-token: ${{ github.token }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
         # Message to comment
         message: '/azp run' 
